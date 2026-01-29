@@ -1,3 +1,4 @@
+using BookingService.Application.Dtos.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,5 @@ public class CategoryWithServicesDto
 	public bool IsActive { get; set; }
 	public DateTime CreatedAt { get; set; }
 	public int ServicesCount { get; set; }
-	//public List<ServiceDto> Services { get; set; }
+	public List<ServiceDto> Services { get; set; }
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BookingService.Application.Interfaces;
-public interface IServiceRepository
+public interface IServiceRepository : IBaseRpository<Service>
 {
 	Task<Service> GetByIdWithDetailsAsync(Guid id);
 	Task<IEnumerable<Service>> GetAllActiveAsync();

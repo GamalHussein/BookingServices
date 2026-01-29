@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BookingService.Application.Mapping;
-public class UserMappingProfile : IRegister
+public class UserMappingConfigration : IRegister
 {
 	public void Register(TypeAdapterConfig config)
 	{

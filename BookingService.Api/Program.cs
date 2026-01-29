@@ -1,6 +1,7 @@
 ﻿// ==========================================
 // BookingServices.API/Program.cs
 // ==========================================
+
 using BookingService.Api.Helpers;
 using BookingService.Api.Seeds;
 using BookingService.Application.Common;
@@ -93,7 +94,7 @@ builder.Services.AddAuthentication(options =>
 
 // ========== Mappster ==========
 var mappingConfig =TypeAdapterConfig.GlobalSettings;
-mappingConfig.Scan(typeof(UserMappingProfile).Assembly);
+mappingConfig.Scan(typeof(UserMappingConfigration).Assembly);
 builder.Services.AddSingleton(mappingConfig);
 var mapper = new Mapper(mappingConfig);
 builder.Services.AddSingleton<IMapper>(mapper);
@@ -104,8 +105,18 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
 
 // ========== Dependency Injection ==========
 builder.Services.AddScoped<JwtHelper>();
+// User
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Category
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+// Service
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+
 
 // ========== CORS ==========
 builder.Services.AddCors(options =>
@@ -167,6 +178,12 @@ var app = builder.Build();
 //	app.UseSwagger();
 //	app.UseSwaggerUI();
 //}
+using (var scope = app.Services.CreateScope())
+{
+	var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	db.Database.Migrate();
+}
+
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -183,26 +200,3 @@ app.MapControllers();
 await IdentitySeed.SeedAsync(app.Services);
 app.Run();
 
-// ==========================================
-// appsettings.json
-// ==========================================
-/*
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=.;Database=BookingServicesDB;Trusted_Connection=True;TrustServerCertificate=True"
-  },
-  "JwtSettings": {
-    "Secret": "YourSuperSecretKeyThatIsAtLeast32CharactersLong123!",
-    "Issuer": "BookingServicesAPI",
-    "Audience": "BookingServicesApp",
-    "ExpirationInMinutes": 1440
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "AllowedHosts": "*"
-}
-*/

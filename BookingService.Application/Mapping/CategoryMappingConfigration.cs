@@ -8,24 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BookingService.Application.Mapping;
-public class CategoryMappingProfile : IRegister
+public class CategoryMappingConfigration : IRegister
 {
 	public void Register(TypeAdapterConfig config)
 	{
 		config.NewConfig<CreateCategoryDto, Category>()
 			.Ignore(e => e.CreatedAt)
 			.Ignore(e => e.UpdatedAt)
-			.Ignore(e => e.Id);
-			//.Ignore(e=>e.Services);
+			.Ignore(e => e.Id)
+			.Ignore(e=>e.Services);
 
 		config.NewConfig<UpdateCategoryDto, Category>()
 			.Ignore(e => e.CreatedAt)
 			.Map(e => e.UpdatedAt,c=>DateTime.UtcNow)
-			.Ignore(e => e.Id);
-		//.Ignore(e=>e.Services);
+			.Ignore(e => e.Id)
+		    .Ignore(e=>e.Services);
 
 		config.NewConfig<Category, CategoryWithServicesDto>()
-			//.Map(c=>c.Services,d=>d.Services)
+			.Map(c=>c.Services,d=>d.Services)
 			.Map(des=>des.ServicesCount,src=>src.Services.Count);
 	}
 }
