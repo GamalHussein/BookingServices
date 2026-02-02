@@ -117,6 +117,10 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 
+// Booking
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingServices>();
+
 
 // ========== CORS ==========
 builder.Services.AddCors(options =>
@@ -178,11 +182,11 @@ var app = builder.Build();
 //	app.UseSwagger();
 //	app.UseSwaggerUI();
 //}
-using (var scope = app.Services.CreateScope())
-{
-	var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-	db.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//	var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//	db.Database.Migrate();
+//}
 
 
 app.UseSwagger();
