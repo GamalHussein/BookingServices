@@ -105,6 +105,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
 
 // ========== Dependency Injection ==========
 builder.Services.AddScoped<JwtHelper>();
+builder.Services.AddScoped<StripeService>();
 // User
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -121,6 +122,13 @@ builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingService, BookingServices>();
 
+// Payment
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+// Notification
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // ========== CORS ==========
 builder.Services.AddCors(options =>

@@ -8,11 +8,13 @@ namespace BookingService.Application.Services;
 public class BookingServices(
 	IBookingRepository bookingRepository,
 	IServiceRepository serviceRepository,
+	INotificationService notificationService,
 	IMapper mapper
 	) : IBookingService
 {
 	private readonly IBookingRepository BookingRepository = bookingRepository;
 	private readonly IServiceRepository ServiceRepository = serviceRepository;
+	private readonly INotificationService _notificationService = notificationService;
 	private readonly IMapper Mapper = mapper;
 
 	public async Task<bool> CancelAsync(Guid id, Guid userId, CancelBookingDto cancelDto)
@@ -34,6 +36,18 @@ public class BookingServices(
 		booking.Status = BookingStatus.Cancelled;
 		booking.CreatedAt = DateTime.UtcNow;
 		booking.Notes= $"{booking.Notes}\nسبب الإلغاء: {cancelDto.CancellationReason}";
+
+		
+		var recipientId = userId == booking.CustomerId
+			? booking.Service.ProviderId
+			: booking.CustomerId;
+
+		await _notificationService.SendAsync(
+			recipientId,
+			"تم إلغاء الحجز",
+			$"تم إلغاء الحجز لخدمة {booking.Service.Name}"
+		);
+
 		return await BookingRepository.UpdateAsync(booking);
 
 	}
@@ -75,6 +89,11 @@ public class BookingServices(
 		{
 			throw new Exception("لا يمكن تأكيد الحجز في الحالة الحالية");
 		}
+		await _notificationService.SendAsync(
+			   booking.CustomerId,
+			   "تم تأكيد الحجز",
+			   $"تم تأكيد حجزك لخدمة {booking.Service.Name}"
+		   );
 		booking.Status = BookingStatus.Confirmed;
 		return await BookingRepository.UpdateAsync(booking);
 	}
@@ -101,6 +120,17 @@ public class BookingServices(
 		booking.TotalPrice = service.Price;
 		var createdBooking = await BookingRepository.CreateAsync(booking);
 		var bookingDto = Mapper.Map<BookingDto>(createdBooking);
+		await _notificationService.SendAsync(
+			customerId,
+			"حجز جديد",
+			$"تم إنشاء حجزك لخدمة {service.Name} بنجاح");
+
+		await _notificationService.SendAsync(
+			service.ProviderId,
+			"حجز جديد",
+			$"لديك حجز جديد لخدمة {service.Name}"
+		);
+
 		return bookingDto;
 	}
 

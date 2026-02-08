@@ -161,7 +161,7 @@ namespace BookingService.Infrastructure.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("BookingService.Domain.Models.Category", b =>
@@ -193,7 +193,7 @@ namespace BookingService.Infrastructure.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("BookingService.Domain.Models.Notification", b =>
@@ -226,7 +226,7 @@ namespace BookingService.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("BookingService.Domain.Models.Payment", b =>
@@ -270,7 +270,7 @@ namespace BookingService.Infrastructure.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("BookingService.Domain.Models.Service", b =>
@@ -319,7 +319,7 @@ namespace BookingService.Infrastructure.Migrations
 
                     b.HasIndex("ProviderId");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
